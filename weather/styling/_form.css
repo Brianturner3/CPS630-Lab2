@@ -1,0 +1,67 @@
+form {
+  position: absolute;
+  top: 20vh;
+  margin-left: 25px;
+  margin-right: 25px; }
+
+input {
+  position: relative;
+  margin-top: 30px;
+  border-radius: 15px;
+  font-size: 30px;
+  background: #bababa;
+  min-width: 200px;
+  width: 225px;
+  height: 50px;
+  border: none; }
+
+#form_display {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%); }
+
+#submitButton {
+  background: transparent;
+  min-width: 200px;
+  width: 225px;
+  border-shadow: none;
+  margin-top: 15;
+  margin-bottom: 30px;
+  box-shadow: none;
+  border: black solid 1px;
+  font-size: 20px; }
+
+#city_label {
+  font-size: 2em;
+  font-family: 'Lato', sans-serif;
+  font-weight: 100; }
+
+@media only screen and (min-width: 468px) {
+  form {
+    top: 20vh; }
+
+  input {
+    width: 100px; }
+
+  #city_label {
+    font-size: 2em; }
+
+  #submitButton {
+    width: 300px; } }
+@media only screen and (min-width: 568px) {
+  form {
+    top: 5vh; }
+
+  input {
+    width: 100%; }
+
+  #city_label {
+    font-size: 2.5em; }
+
+  #submitButton {
+    width: 100%; } }
+
+/*# sourceMappingURL=_form.css.map */

@@ -1,0 +1,93 @@
+#weather_display{
+	//background: #8fa0bc;
+	position: absolute;
+	top: 150%;
+	left: 50%;
+	margin-right: -50%;
+	transform: translate(-50%, -50%);
+	-webkit-transform: translate(-50%,-50%);
+}
+#next_day_1{
+	position:absolute;
+	top: 87%;
+}
+#weather_icon{
+	position: absolute;
+	height: 100px;
+	width: 100px;
+	top: 38%;
+}
+#weather_temp{
+	position: absolute;
+	top: 71.5%;
+		left: 50%;
+	margin-right: -50%;
+	transform: translate(-50%, -50%);
+	-webkit-transform: translate(-50%,-50%);
+	font-size: 3em;
+}
+#weather_city{
+	position:relative;
+	left: 10px;
+	top:10px;
+}
+#weather_humidity{
+	position:absolute;
+	right: 10px;
+	top: 10px;
+}
+#weather_wind{
+	position: absolute;
+	right:13px;
+	top:30px;
+}
+.center_obj{
+	//Should have "top : SOME VALYE;"
+	left: 50%;
+	margin-right: -50%;
+	transform: translate(-50%, -50%);
+	-webkit-transform: translate(-50%,-50%);
+}
+.bottom_con_lbl{
+	font-size: 12px;
+	position: absolute;
+	top: 15%;
+	left: 50%;
+	margin-right: -50%;
+	transform: translate(-50%, -50%);
+	-webkit-transform: translate(-50%,-50%);
+}
+.bottom_con_img{
+	height: 25px;
+	width: 25px;
+	position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+   	-webkit-transform: translate(-50%,-50%);
+}
+.bottom_con_temp{
+	position: absolute;
+	top: 85%;
+	left: 50%;
+	margin-right: -50%;
+	transform: translate(-50%, -50%);
+	-webkit-transform: translate(-50%,-50%);
+}
+#temp_conversion{
+	    position: absolute;
+    top: 92%;
+    left: 50%;
+    margin-right: -50%;
+    -webkit-transform: translate(-50%,-50%);
+}
+@media only screen and (min-width:468px){
+
+}
+@media only screen and (min-width:568px){
+.bottom_con_img{
+	height: 35px;
+	width: 35px;
+}
+}

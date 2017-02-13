@@ -1,0 +1,278 @@
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Weather App</title>
+	<link rel="stylesheet" href="styling/index.css">
+</head>
+<body>
+
+	<!-- Simple form asking user for city -->
+	<section>
+		<div class="container_100w" id="form_display">
+			<form id="weatherForm" action="" >
+				<label id="city_label">Enter city name to get forecast for cities around the globe<br><input type="text" name="city" value=""></label><br>
+				<!-- <p style="font-size: 10px; color: grey;padding-top:4px;padding-left:5px;">Don't forget to capitalize the first letter!</p> -->
+				<input type="button" onClick="" value="submit" id="submitButton">
+			</form>
+
+			<!-- Small Chevron Button -->
+			<a href="#weather_display"><img  id="chevron_down" src="images/icons/down-chevron.svg" alt="" style="height:30px; width: 30px;"></a>
+		</div>
+	</section>
+
+
+	<!-- This is where the weather information will be displayed -->
+	<main>
+		<div class="container_100w" id="weather_display">
+			<div class="container_75h" id="current_day" style="background: white;">
+				<p id="weather_city"><span id="city">Unknown</span></p>
+				<img class="center_obj" src="" alt="" id="weather_icon">
+				<p class="center_obj temperature" id="weather_temp">0</p>
+				<p id="temp_conversion"><span class="" id="celsius_btn">&deg;C</span> | <span class="" id="farenheit_btn">&deg;F</span></p>
+				<p id="weather_humidity">Humidity: <span id="humidity">67</span>%</p>
+
+				<p id="weather_wind">Wind: <span id="wind">0</span> mph <span id="direction">NW</span></p>
+			</div>
+			<div class="container_25h center_obj" id="next_day_1" style="background: black;">
+				<div class="container_25w" style="background: white;">
+					<p class="bottom_con_lbl"><span id="forecast_day_1">Unknown</span></p>
+					<img src="images/icons/.svg" alt="" class="bottom_con_img" id="forecast_icon_1">
+					<p class="bottom_con_temp"><span class="temperature" id="forecast_temp_1">Unknown</span>&deg;</p>
+				</div>
+				<div class="container_25w" style="background: white;">
+					<p class="bottom_con_lbl"><span id="forecast_day_2">Unknown</span></p>
+					<img src="images/icons/.svg" alt="" class="bottom_con_img" id="forecast_icon_2">
+					<p class="bottom_con_temp"><span class="temperature" id="forecast_temp_2">Unknown</span>&deg;</p>				
+				</div>
+				<div class="container_25w" style="background: white;">
+					<p class="bottom_con_lbl"><span id="forecast_day_3">Unknown</span></p>
+					<img src="images/icons/.svg" alt="" class="bottom_con_img" id="forecast_icon_3">
+					<p class="bottom_con_temp"><span class="temperature" id="forecast_temp_3">Unknown</span>&deg;</p>			
+				</div>
+				<div class="container_25w" style="background: white;">
+					<p class="bottom_con_lbl"><span id="forecast_day_4">Unknown</span></p>
+					<img src="images/icons/.svg" alt="" class="bottom_con_img" id="forecast_icon_4">
+					<p class="bottom_con_temp"><span class="temperature" id="forecast_temp_4">Unknown</span>&deg;</p>				
+				</div>
+			</div>
+		</div>
+	</main>
+
+
+	<!-- Javascript -->
+	<!--<script type="text/javascript" src="javascript/index.js"></script>-->
+	<script type="text/javascript">	
+//Variables for ID's
+var CITY;
+var APPID = "34346713b65c116a445c803b10d0aac3"; 
+var temp;
+var totTemp = [];
+var totIcon = [];
+var totDay = [];
+var loc;
+var icon;
+var humidity;
+var wind;
+var direction;
+var celsiusFlag = true;
+
+var forecast_temp_1;
+var forecast_icon_1;
+
+function updateByCity(city){
+	var url = "http://api.openweathermap.org/data/2.5/forecast?" + 
+		//"zip=" + zip +
+		"q=" + city +
+		"&APPID=" + APPID;
+		// Ex. http://api.openweathermap.org/data/2.5/forecast/city?id=524901&APPID={APIKEY}
+		sendRequest(url);
+	}
+
+
+
+	function sendRequest(url){
+		var xmlhttp = new XMLHttpRequest();
+		xmlhttp.onreadystatechange = function() {
+			if(xmlhttp.readyState == 4 && xmlhttp.status == 200){
+				var data = JSON.parse(xmlhttp.responseText);
+				var weather = {};
+				//weather.icon = data.list[0].weather[0].id;
+				//weather.totIcon = [data.list[0].weather[0].id,data.list[7].weather[0].id,data.list[15].weather[0].id,data.list[23].weather[0].id,data.list[31].weather[0].id]
+				weather.humidity = data.list[0].main.humidity;
+				weather.wind = data.list[0].wind.speed;
+				weather.direction = degreesToDirection(data.list[0].wind.deg);
+				weather.loc = data.city.name;
+			//weather.temp = kelvinToCelsius(data.list[0].main.temp);
+			//weather.totTemp = [kelvinToCelsius(data.list[0].main.temp),kelvinToCelsius(data.list[8].main.temp),kelvinToCelsius(data.list[15].main.temp),kelvinToCelsius(data.list[23].main.temp),kelvinToCelsius(data.list[31].main.temp)]
+			getTemp(data);
+			getIcon(data);
+			getDay(data);
+			weather.totDay = totDay;
+			weather.totTemp = totTemp;
+			weather.totIcon = totIcon;
+			update(weather);
+		}
+	};
+
+	xmlhttp.open("GET",url,true);
+	xmlhttp.send();
+}
+
+//Convert Kelvin Temperature to celsius
+function kelvinToCelsius(tempK){
+	return Math.round(tempK - 273.15);
+}
+//Convert Kelvin Temperature to farenheit
+function kelvinToFarenheit(tempK){
+	return Math.round(tempK*(9/5)-459.67);
+}
+//Converts Celsius to Farenheit
+function celsiusToFarenheit(tempC){
+	return Math.round((tempC * 9) / 5 + 32);
+}
+//Converts Farhenheit to Celsius
+function rahenheitToCelsius(tempF){
+	return Math.round((tempF -32) * 5 / 9);
+}
+//Get's the temperature for current day and next 4 days at noon
+function getTemp(jsonResponse){
+	var data = jsonResponse;
+	var index = 1;
+	if(celsiusFlag == true)
+		totTemp[0] = kelvinToCelsius(data.list[0].main.temp);
+	else
+		totTemp[0] = kelvinToFarenheit(data.list[0].main.temp);
+	for(var i = 4; i < data.list.length; i+=8){
+		if(celsiusFlag == true)
+			totTemp[index] = kelvinToCelsius(data.list[i].main.temp);
+		else
+			totTemp[index] = kelvinToFarenheit(data.list[i].main.temp);
+		console.log(data.list[i].main.temp);	
+		index++;
+	}
+}
+//Get's the day of the week
+function getDay(jsonResponse){
+	var data = jsonResponse;
+	var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+	var index = 1;
+
+	for(var i = 4; i < data.list.length; i+=8){
+		var unixD = data.list[i].dt;
+		var d = new Date((unixD *1000)-18000);
+		totDay[index] = days[d.getDay()];
+		console.log(totDay[index]);
+		index++;
+	}
+	//console.log("The date is " + days[d.getDay()] );
+}
+//Get's icon for current day and next 4 days at noon
+function getIcon(jsonResponse){
+	var data = jsonResponse;
+	var index = 1;
+	totIcon[0] = data.list[0].weather[0].id;
+	for(var i = 4; i < data.list.length; i+=8){
+		totIcon[index] = data.list[i].weather[0].id;
+		console.log(data.list[i].weather[0].id);
+		index++;
+	}
+}
+
+//
+function degreesToDirection(degree){
+	var range = 360/16;
+	var low = 360 - range/2;
+	var high = (low+range) % 360;
+	var angles = ["N", "NE", "NNE", "ENE", "E", "ESE", "SE","SSE","S","SSW","SW","WSW","W","WNW","NW","NNW"];
+	for(i in angles){
+		if(degree >= low && degree < high)
+			return angles[i];
+		low = (low + range) % 360;
+		high = (high + range) % 360;
+	}
+	return "N";
+}
+
+function update(weather){
+	//Main Secetion
+	wind.innerHTML = weather.wind;
+	direction.innerHTML = weather.direction;
+	humidity.innerHTML = weather.humidity;
+	loc.innerHTML = weather.loc;
+	temp.innerHTML = weather.totTemp[0] +"&deg;";//weather.temp+"&deg;";
+	icon.src = "images/icons/" + weather.totIcon[0] + ".svg";
+	//Bottom Section
+	//Day 1
+	f_temp_1.innerHTML = weather.totTemp[1];
+	console.log("update: " + weather.totTemp[1]);
+	f_img_1.src = "images/icons/" + weather.totIcon[1] + ".svg";
+	f_day_1.innerHTML = weather.totDay[1];
+	//Day 2
+	f_temp_2.innerHTML = weather.totTemp[2];
+	f_img_2.src = "images/icons/" + weather.totIcon[2] + ".svg";
+	f_day_2.innerHTML = weather.totDay[2];
+	//Day 3
+	f_temp_3.innerHTML = weather.totTemp[3];
+	f_img_3.src = "images/icons/" + weather.totIcon[3] + ".svg";
+	f_day_3.innerHTML = weather.totDay[3];	
+	//Day 4
+	f_temp_4.innerHTML = weather.totTemp[4];
+	console.log("update: " + weather.totIcon[4]);
+	f_img_4.src = "images/icons/" + weather.totIcon[4] + ".svg";
+	f_day_4.innerHTML = weather.totDay[4];
+}
+
+document.getElementById("submitButton").addEventListener("click",function() {
+	console.log("pressed");
+	CITY = document.getElementById("weatherForm").elements["city"].value;
+
+	temp = document.getElementById("weather_temp");
+	loc = document.getElementById("city");
+	icon = document.getElementById("weather_icon");
+	humidity = document.getElementById("humidity");
+	wind = document.getElementById("wind");
+	direction =document.getElementById("direction");
+
+	f_temp_1 = document.getElementById("forecast_temp_1");
+	f_img_1 = document.getElementById("forecast_icon_1");
+	f_day_1 = document.getElementById("forecast_day_1");
+
+	f_temp_2 = document.getElementById("forecast_temp_2");
+	f_img_2 = document.getElementById("forecast_icon_2");
+	f_day_2 = document.getElementById("forecast_day_2");
+	
+	f_temp_3 = document.getElementById("forecast_temp_3");
+	f_img_3 = document.getElementById("forecast_icon_3");
+	f_day_3 = document.getElementById("forecast_day_3");
+
+	f_temp_4 = document.getElementById("forecast_temp_4");
+	f_img_4 = document.getElementById("forecast_icon_4");
+	f_day_4 = document.getElementById("forecast_day_4");
+	
+	updateByCity(CITY);
+});
+
+document.getElementById("celsius_btn").addEventListener("click", function(){
+	celsiusFlag = true;
+	document.getElementById("celsius_btn").style.color = "blue";
+	document.getElementById("farenheit_btn").style.color = "grey";
+	updateByCity(CITY);
+});
+
+document.getElementById("farenheit_btn").addEventListener("click", function(){
+	celsiusFlag = false;
+	document.getElementById("celsius_btn").style.color = "grey";
+	document.getElementById("farenheit_btn").style.color = "blue";
+	updateByCity(CITY);
+});
+
+window.onload = function() {
+	document.getElementById("celsius_btn").style.color = "blue";
+	document.getElementById("farenheit_btn").style.color = "grey";
+}
+
+</script>
+
+</body>
+</html>
