@@ -1,4 +1,7 @@
-# CPS630-Lab2
+# CPS630-Lab2 (Weather App)
+
+View App using: http://turnerdesign.ca/weatherapp/index.html 
+
 Create a beautiful, fully functional responsive Weather app using AJAX with JSON OR XML and current data from the openweathermap.org server. 
 Students need to apply for a free unique key to access information from: http://openweathermap.org/api Criteria: 
 
